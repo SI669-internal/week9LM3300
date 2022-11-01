@@ -4,7 +4,7 @@ import { Input, Button } from '@rneui/themed';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_ITEM, UPDATE_ITEM } from '../data/Reducer';
-// import { saveAndDispatch } from '../data/db';
+import { saveAndDispatch } from '../data/DB';
 
 function DetailsScreen(props) {
 
@@ -22,18 +22,18 @@ function DetailsScreen(props) {
         text: newText, 
       }
     }
-    dispatch(action);
+    saveAndDispatch(action, dispatch);
   }
 
   const updateItem = (item, newText) => {
-    dispatch({
+    const action = {
       type: UPDATE_ITEM,
       payload: {
         key: item.key,
         text: newText, 
       }
-    });
-
+    };
+    saveAndDispatch(action, dispatch);
   }
 
   return (

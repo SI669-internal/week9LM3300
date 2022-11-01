@@ -4,6 +4,7 @@ import { Icon } from '@rneui/themed';
 import { useDispatch } from 'react-redux';
 
 import { DELETE_ITEM } from '../data/Reducer';
+import { saveAndDispatch } from '../data/DB';
 
 function ListItem(props) {
 
@@ -11,13 +12,13 @@ function ListItem(props) {
   const dispatch = useDispatch();
 
   const deleteItem = (item) => {
-    dispatch({
+    const action = {
       type: DELETE_ITEM,
       payload: {
         key: item.key
       }
-    })
-
+    };
+    saveAndDispatch(action, dispatch);
   }
 
   return (

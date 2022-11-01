@@ -12,7 +12,7 @@ function HomeScreen(props) {
   return(
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>My List</Text>
+        <Text style={styles.headerText}>ListMaker 3300</Text>
       </View>
       <View style={styles.listContainer}>
         <FlatList
