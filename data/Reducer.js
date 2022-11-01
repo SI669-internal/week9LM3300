@@ -2,6 +2,7 @@
 const ADD_ITEM = 'ADD_ITEM';
 const UPDATE_ITEM = 'UPDATE_ITEM';
 const DELETE_ITEM = 'DELETE_ITEM';
+const LOAD_ITEMS = 'LOAD_ITEMS';
 
 const initListItems = [
   { text: 'Get costume', key: Date.now() },
@@ -50,6 +51,13 @@ const deleteItem = (state, itemId) => {
   }
 }
 
+const loadItems = (state, newItems) => {
+  return {
+    ...state, 
+    listItems: newItems
+  }
+}
+
 function rootReducer(state=initialState, action) {
   const { type, payload } = action;
   switch (type) {
@@ -59,6 +67,8 @@ function rootReducer(state=initialState, action) {
       return updateItem(state, payload.key, payload.text, payload.tags);
     case DELETE_ITEM:
       return deleteItem(state, payload.key);
+    case LOAD_ITEMS:
+      return loadItems(state, payload.newItems);
     default:
       return state;
   }
@@ -66,4 +76,4 @@ function rootReducer(state=initialState, action) {
 
 export { 
   rootReducer, 
-  ADD_ITEM, UPDATE_ITEM, DELETE_ITEM };
+  ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD_ITEMS };

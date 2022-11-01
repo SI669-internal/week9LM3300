@@ -1,13 +1,22 @@
-import { useSelector } from "react-redux";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { StyleSheet, View, Text, FlatList } from "react-native";
 import { Button } from "@rneui/base";
 
 import ListItem from "../components/ListItem";
+import { LOAD_ITEMS } from "../data/Reducer";
+import { saveAndDispatch } from "../data/DB"; 
+import { useEffect } from "react";
 
 function HomeScreen(props) {
   
   const { navigation } = props;
   const listItems = useSelector((state) => state.listItems);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadAction = { type: LOAD_ITEMS };
+    saveAndDispatch(loadAction, dispatch);
+  }, []);
   
   return(
     <View style={styles.container}>

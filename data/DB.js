@@ -6,7 +6,7 @@ import {
 } from 'firebase/firestore';
   
 import { firebaseConfig } from '../Secrets';
-import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM } from './Reducer';
+import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD_ITEMS } from './Reducer';
 
 let app, db = undefined;
 const COLLNAME = 'listItems';
@@ -50,6 +50,21 @@ const updateItemAndDispatch = async (action, dispatch) => {
   dispatch(action);
 }
 
+const loadItemsAndDispatch = async (action, dispatch) => {
+  const querySnap = await getDocs(collection(db, COLLNAME));
+  let newItems = [];
+  querySnap.forEach(docSnap => {
+    let newItem = docSnap.data();
+    newItem.key = docSnap.id;
+    newItems.push(newItem);
+  });
+  let newAction = {
+    ...action,
+    payload: { newItems }
+  };
+  dispatch(newAction);
+}
+
 const saveAndDispatch = async(action, dispatch) => {
   const {type, payload} = action;
   switch (type) {
@@ -61,6 +76,9 @@ const saveAndDispatch = async(action, dispatch) => {
       return;
     case UPDATE_ITEM:
       updateItemAndDispatch(action, dispatch);
+      return;
+    case LOAD_ITEMS:
+      loadItemsAndDispatch(action, dispatch);
       return;
     default:
       return;
