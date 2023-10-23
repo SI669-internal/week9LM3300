@@ -2,23 +2,12 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from '@rneui/themed';
 import { useDispatch } from 'react-redux';
-
-import { DELETE_ITEM } from '../data/Reducer';
+import { deleteItem } from '../data/Actions';
 
 function ListItem(props) {
 
   const { item, navigation } = props;
   const dispatch = useDispatch();
-
-  const deleteItem = (item) => {
-    dispatch({
-      type: DELETE_ITEM,
-      payload: {
-        key: item.key
-      }
-    })
-
-  }
 
   return (
     <View style={styles.listItemContainer}>
@@ -35,7 +24,7 @@ function ListItem(props) {
       <TouchableOpacity 
         style={styles.li3}
         onPress={()=>{
-          deleteItem(item);
+          dispatch(deleteItem(item));
         }}  
       >
         <Icon 

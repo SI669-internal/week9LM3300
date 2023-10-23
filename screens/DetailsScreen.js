@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { FlatList, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Input, Button } from '@rneui/themed';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { ADD_ITEM, UPDATE_ITEM } from '../data/Reducer';
-// import { saveAndDispatch } from '../data/db';
+import { addItem, updateItem } from "../data/Actions";
 
 function DetailsScreen(props) {
 
@@ -14,27 +13,6 @@ function DetailsScreen(props) {
   const dispatch = useDispatch();
 
   const [inputText, setInputText] = useState(item.text);
-
-  const addItem = (newText) => {
-    const action = {
-      type: ADD_ITEM,
-      payload: {
-        text: newText, 
-      }
-    }
-    dispatch(action);
-  }
-
-  const updateItem = (item, newText) => {
-    dispatch({
-      type: UPDATE_ITEM,
-      payload: {
-        key: item.key,
-        text: newText, 
-      }
-    });
-
-  }
 
   return (
     <View style={styles.container}>
@@ -63,9 +41,9 @@ function DetailsScreen(props) {
           title='Save'
           onPress={()=>{
             if (item.key === -1) {
-              addItem(inputText);
+              dispatch(addItem(inputText));
             } else {
-              updateItem(item, inputText);
+              dispatch(updateItem(item, inputText));
             }
             navigation.goBack();
           }}
