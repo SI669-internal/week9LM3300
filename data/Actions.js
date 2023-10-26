@@ -1,12 +1,32 @@
 
 import { firebaseConfig } from '../Secrets';
-import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM } from "./Reducer";
+import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD_ITEMS } from "./Reducer";
 
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc,
+  getDocs, doc, collection, getFirestore } from 'firebase/firestore';
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+const loadItems = () => {
+  return async (dispatch) => {
+    let querySnapshot = await getDocs(collection(db, 'todos'));
+    let newListItems = querySnapshot.docs.map(docSnap => {
+      return {
+        ...docSnap.data(),
+        key: docSnap.id
+      }
+    });
+    console.log('loading items:', newListItems);
+    dispatch({
+      type: LOAD_ITEMS,
+      payload: {
+        newListItems: newListItems
+      }
+    });
+  }
+}
 
 const addItem = (newText) => {
   return async (dispatch) => {
@@ -22,8 +42,9 @@ const addItem = (newText) => {
   }
 }
 
-const updateItem = (item, newText) => {
-  return (dispatch) => {
+const updateItem =  (item, newText) => {
+  return async (dispatch) => {
+    await updateDoc(doc(db, 'todos', item.key), {text:newText});
     dispatch({
       type: UPDATE_ITEM,
       payload: {
@@ -35,7 +56,8 @@ const updateItem = (item, newText) => {
 }
 
 const deleteItem = (item) => {
-  return (dispatch) => {
+  return async (dispatch) => {
+    await deleteDoc(doc(db, 'todos', item.key));
     dispatch({
       type: DELETE_ITEM,
       payload: {
@@ -46,5 +68,5 @@ const deleteItem = (item) => {
 }
 
 export {
-  addItem, updateItem, deleteItem
+  addItem, updateItem, deleteItem, loadItems
 }
